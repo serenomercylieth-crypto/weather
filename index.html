@@ -1,0 +1,540 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weekly Weather Update</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: linear-gradient(135deg, #dff3ff, #f7fbff);
+            color: #17324d;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 92%;
+            max-width: 1200px;
+            margin: 30px auto;
+        }
+
+        /* HEADER */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .title h1 {
+            font-size: 32px;
+            margin-bottom: 5px;
+        }
+
+        .title p {
+            color: #60788e;
+        }
+
+        .search {
+            display: flex;
+            gap: 8px;
+        }
+
+        .search input {
+            padding: 12px 15px;
+            border: none;
+            border-radius: 10px;
+            outline: none;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+        }
+
+        .search button {
+            border: none;
+            background: #1877c9;
+            color: white;
+            padding: 12px 18px;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        /* CURRENT WEATHER */
+        .current-weather {
+            background: rgba(255,255,255,0.9);
+            border-radius: 22px;
+            padding: 30px;
+            display: grid;
+            grid-template-columns: 1.3fr 1fr;
+            gap: 30px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+            margin-bottom: 25px;
+        }
+
+        .location {
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .date {
+            color: #71879a;
+            margin-top: 5px;
+        }
+
+        .temperature {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-top: 25px;
+        }
+
+        .weather-icon {
+            font-size: 75px;
+        }
+
+        .temp {
+            font-size: 70px;
+            font-weight: bold;
+        }
+
+        .condition {
+            font-size: 22px;
+            margin-top: 5px;
+        }
+
+        .feels {
+            color: #71879a;
+            margin-top: 5px;
+        }
+
+        /* DETAILS */
+        .details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .detail-card {
+            background: #f4f9fc;
+            border-radius: 15px;
+            padding: 18px;
+        }
+
+        .detail-card span {
+            display: block;
+            color: #71879a;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .detail-card strong {
+            font-size: 20px;
+        }
+
+        /* SECTION */
+        .section-title {
+            margin: 30px 0 15px;
+            font-size: 24px;
+        }
+
+        /* FORECAST */
+        .forecast {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 12px;
+        }
+
+        .day {
+            background: white;
+            padding: 20px 12px;
+            border-radius: 17px;
+            text-align: center;
+            box-shadow: 0 5px 18px rgba(0,0,0,0.06);
+            transition: transform 0.2s;
+        }
+
+        .day:hover {
+            transform: translateY(-5px);
+        }
+
+        .day-name {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .day-icon {
+            font-size: 40px;
+            margin: 10px 0;
+        }
+
+        .day-condition {
+            font-size: 13px;
+            color: #667d91;
+            min-height: 35px;
+        }
+
+        .temps {
+            margin-top: 12px;
+        }
+
+        .high {
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .low {
+            color: #8093a3;
+            margin-left: 5px;
+        }
+
+        .rain {
+            margin-top: 10px;
+            font-size: 13px;
+            color: #1877c9;
+        }
+
+        /* EXTRA INFORMATION */
+        .extra {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .extra-card {
+            background: white;
+            padding: 20px;
+            border-radius: 17px;
+            box-shadow: 0 5px 18px rgba(0,0,0,0.06);
+        }
+
+        .extra-card h3 {
+            margin-bottom: 10px;
+        }
+
+        .extra-card p {
+            color: #61788c;
+        }
+
+        /* ALERT */
+        .alert {
+            background: #fff6df;
+            border-left: 6px solid #f0a500;
+            padding: 18px;
+            border-radius: 12px;
+            margin-top: 20px;
+        }
+
+        .alert strong {
+            color: #a56b00;
+        }
+
+        /* FOOTER */
+        footer {
+            text-align: center;
+            color: #71879a;
+            padding: 25px;
+            font-size: 14px;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 900px) {
+            .forecast {
+                grid-template-columns: repeat(4, 1fr);
+            }
+
+            .current-weather {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 600px) {
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            .search {
+                width: 100%;
+            }
+
+            .search input {
+                flex: 1;
+            }
+
+            .forecast {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .extra {
+                grid-template-columns: 1fr;
+            }
+
+            .temp {
+                font-size: 55px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- HEADER -->
+    <header>
+        <div class="title">
+            <h1>Weather Update</h1>
+            <p id="todayDate">Loading date...</p>
+        </div>
+
+        <div class="search">
+            <input type="text" id="cityInput" placeholder="Enter city...">
+            <button onclick="searchCity()">Search</button>
+        </div>
+    </header>
+
+
+    <!-- CURRENT WEATHER -->
+    <section class="current-weather">
+
+        <div>
+            <div class="location" id="location">
+                Manila, Philippines
+            </div>
+
+            <div class="date">
+                Updated October 1, 2026
+            </div>
+
+            <div class="temperature">
+                <div class="weather-icon">⛅</div>
+
+                <div>
+                    <div class="temp">33°C</div>
+                    <div class="condition">
+                        Partly Cloudy
+                    </div>
+                    <div class="feels">
+                        Feels like 36°C
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- WEATHER DETAILS -->
+        <div class="details">
+
+            <div class="detail-card">
+                <span>Humidity</span>
+                <strong>77%</strong>
+            </div>
+
+            <div class="detail-card">
+                <span>Wind</span>
+                <strong>14 km/h</strong>
+            </div>
+
+            <div class="detail-card">
+                <span>Wind Direction</span>
+                <strong>SW</strong>
+            </div>
+
+            <div class="detail-card">
+                <span>Rain Chance</span>
+                <strong>40%</strong>
+            </div>
+
+            <div class="detail-card">
+                <span>UV Index</span>
+                <strong>8 High</strong>
+            </div>
+
+            <div class="detail-card">
+                <span>Visibility</span>
+                <strong>10 km</strong>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- WEEKLY FORECAST -->
+    <h2 class="section-title">7-Day Forecast</h2>
+
+    <section class="forecast">
+
+        <div class="day">
+            <div class="day-name">Thu</div>
+            <div class="day-icon">⛅</div>
+            <div class="day-condition">Partly Cloudy</div>
+            <div class="temps">
+                <span class="high">33°</span>
+                <span class="low">24°</span>
+            </div>
+            <div class="rain">🌧 40%</div>
+        </div>
+
+        <div class="day">
+            <div class="day-name">Fri</div>
+            <div class="day-icon">🌦️</div>
+            <div class="day-condition">Scattered Rain</div>
+            <div class="temps">
+                <span class="high">33°</span>
+                <span class="low">25°</span>
+            </div>
+            <div class="rain">🌧 50%</div>
+        </div>
+
+        <div class="day">
+            <div class="day-name">Sat</div>
+            <div class="day-icon">🌦️</div>
+            <div class="day-condition">Rain Showers</div>
+            <div class="temps">
+                <span class="high">33°</span>
+                <span class="low">25°</span>
+            </div>
+            <div class="rain">🌧 55%</div>
+        </div>
+
+        <div class="day">
+            <div class="day-name">Sun</div>
+            <div class="day-icon">⛅</div>
+            <div class="day-condition">Partly Cloudy</div>
+            <div class="temps">
+                <span class="high">32°</span>
+                <span class="low">25°</span>
+            </div>
+            <div class="rain">🌧 40%</div>
+        </div>
+
+        <div class="day">
+            <div class="day-name">Mon</div>
+            <div class="day-icon">🌤️</div>
+            <div class="day-condition">Mostly Sunny</div>
+            <div class="temps">
+                <span class="high">32°</span>
+                <span class="low">25°</span>
+            </div>
+            <div class="rain">🌧 30%</div>
+        </div>
+
+        <div class="day">
+            <div class="day-name">Tue</div>
+            <div class="day-icon">🌦️</div>
+            <div class="day-condition">Rain Showers</div>
+            <div class="temps">
+                <span class="high">32°</span>
+                <span class="low">25°</span>
+            </div>
+            <div class="rain">🌧 45%</div>
+        </div>
+
+        <div class="day">
+            <div class="day-name">Wed</div>
+            <div class="day-icon">⛅</div>
+            <div class="day-condition">Cloudy</div>
+            <div class="temps">
+                <span class="high">32°</span>
+                <span class="low">25°</span>
+            </div>
+            <div class="rain">🌧 35%</div>
+        </div>
+
+    </section>
+
+
+    <!-- ADDITIONAL WEATHER INFORMATION -->
+    <h2 class="section-title">Weather Information</h2>
+
+    <section class="extra">
+
+        <div class="extra-card">
+            <h3>🌅 Sunrise</h3>
+            <p>5:46 AM</p>
+        </div>
+
+        <div class="extra-card">
+            <h3>🌇 Sunset</h3>
+            <p>5:45 PM</p>
+        </div>
+
+        <div class="extra-card">
+            <h3>🌡️ Temperature Range</h3>
+            <p>24°C — 33°C</p>
+        </div>
+
+    </section>
+
+
+    <!-- WEATHER ALERT -->
+    <div class="alert">
+        <strong>Weather Advisory</strong>
+        <p>
+            Partly cloudy to cloudy skies with isolated rainshowers
+            or thunderstorms may occur. Severe thunderstorms may
+            produce heavy rainfall, strong winds, or lightning.
+        </p>
+    </div>
+
+
+    <!-- FOOTER -->
+    <footer>
+        Weather information interface • Data reference: DOST-PAGASA
+    </footer>
+
+</div>
+
+
+<script>
+
+    // Automatically display today's date
+    const today = new Date();
+
+    const options = {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric"
+    };
+
+    document.getElementById("todayDate").textContent =
+        today.toLocaleDateString("en-US", options);
+
+
+    // City search
+    function searchCity() {
+
+        const city = document.getElementById("cityInput").value.trim();
+
+        if (city === "") {
+            alert("Please enter a city.");
+            return;
+        }
+
+        document.getElementById("location").textContent =
+            city + ", Philippines";
+
+        /*
+            This demo only changes the displayed location.
+
+            To retrieve REAL weather information,
+            connect this interface to a weather API
+            such as Open-Meteo or another weather service.
+        */
+    }
+
+</script>
+
+</body>
+</html>
+```
